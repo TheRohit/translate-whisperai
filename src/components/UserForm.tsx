@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,9 +19,12 @@ import { Button } from "./ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { LinkRequest, LinkValidator } from "@/lib/validators/link";
 import axios, { AxiosError } from "axios";
-import { uploadFiles } from "@/lib/uploadthing";
+
+import {useRouter} from "next/navigation" 
 
 const UserForm = ({}) => {
+  const router = useRouter()
+
   const form = useForm<LinkRequest>({
     resolver: zodResolver(LinkValidator),
     defaultValues: {
@@ -45,15 +48,20 @@ const UserForm = ({}) => {
             }
           }
     },
-    onSuccess:(data) => 
-    {   
-        const name = data;
+    onSuccess:() => 
+    {     //api call 2
+        // const name = "./tmp/"+ "audio" + ".mp3"
+      // router.push("/transcribe")
+
+        
         
 
     }
   });
 
   return (
+
+
     <Form {...form}>
       <form onSubmit={form.handleSubmit((e) => sendURL(e))} className="space-y-8">
         <FormField
