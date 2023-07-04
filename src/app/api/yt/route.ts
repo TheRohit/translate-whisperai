@@ -14,7 +14,7 @@ export async function POST(req: Request) {
        
         const audioStream = ytdl(url, {
            
-            filter: "audio",
+            filter: "audioonly",
             
         });
 

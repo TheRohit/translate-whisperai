@@ -49,9 +49,8 @@ const UserForm = ({}) => {
           }
     },
     onSuccess:() => 
-    {     //api call 2
-        // const name = "./tmp/"+ "audio" + ".mp3"
-      // router.push("/transcribe")
+    {    
+      router.push("/transcribe")
 
         
         
