@@ -18,7 +18,8 @@ import Link from "next/link";
 import { Button } from "./ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { LinkRequest, LinkValidator } from "@/lib/validators/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { uploadFiles } from "@/lib/uploadthing";
 
 const UserForm = ({}) => {
   const form = useForm<LinkRequest>({
@@ -35,8 +36,21 @@ const UserForm = ({}) => {
       const payload: LinkRequest = { url };
       const { data } = await axios.post(`/api/yt`, payload);
       return data;
+      
     },
-    onError: (err) => {},
+    onError: (err) => {
+        if (err instanceof AxiosError) {
+            if (err.response?.status === 409) {
+              console.log(err);
+            }
+          }
+    },
+    onSuccess:(data) => 
+    {   
+        const name = data;
+        
+
+    }
   });
 
   return (
