@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
         const videoMetaData = await ytdl.getBasicInfo(url);
        
-        const audioPath = path.join('/tmp', "test.mp4");
+        const audioPath = path.join('/tmp', "test.wav");
         const audioFile = fs.createWriteStream(audioPath);
         console.log('now here')
         audioStream.pipe(audioFile);
