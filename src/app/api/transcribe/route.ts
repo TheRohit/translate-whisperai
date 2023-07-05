@@ -11,6 +11,7 @@ export async function POST(req: Request) {
   const blob = new Blob([fileData], { type: "video/mp4" });
   body.append("file", blob, "test.mp4");
   body.append("model", "whisper-1");
+  // body.append("response_format", "vtt");
   try {
     const { data } = await axios.post(
       "https://api.openai.com/v1/audio/transcriptions",
