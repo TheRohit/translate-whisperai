@@ -101,7 +101,7 @@ const TranscribePage: FC<TranscribePageProps> = ({}) => {
         {processing ? (
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit((e) => sendTranscribe(e))}
+              onSubmit={form.handleSubmit((e) => (console.log("sent")) )}
               className="space-y-8"
             >
               <FormField
