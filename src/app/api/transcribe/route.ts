@@ -1,4 +1,3 @@
-import { TValidator } from "@/lib/validators/transcribe";
 import axios from "axios";
 import fs from "fs";
 import { NextResponse } from "next/server";
@@ -8,8 +7,8 @@ export async function POST(req: Request) {
   const body= new FormData();
   const filePath: string = "/tmp/test.mp4";
   const fileData = fs.readFileSync(filePath);
-  const blob = new Blob([fileData], { type: "video/mp4" });
-  body.append("file", blob, "test.mp4");
+  const blob = new Blob([fileData], { type: "audio/mpeg" });
+  body.append("file", blob, "test.mpeg");
   body.append("model", "whisper-1");
   body.append("response_format", "vtt");
   try {
