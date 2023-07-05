@@ -60,7 +60,7 @@ const UserForm = ({}) => {
 
   return (
 
-
+    <div className="flex flex-col  w-full h-full mt-8">
     <Form {...form}>
       <form onSubmit={form.handleSubmit((e) => sendURL(e))} className="space-y-8">
         <FormField
@@ -72,7 +72,7 @@ const UserForm = ({}) => {
               <FormControl>
                 <Input
                   autoComplete="off"
-                  placeholder="...youtube link"
+                  placeholder="youtube.com/watch?v=dQw4w9WgXcQ"
                   {...field}
                 />
               </FormControl>
@@ -86,7 +86,9 @@ const UserForm = ({}) => {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
+    </div>
   );
+    
 };
 
 export default UserForm;

@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ScrollArea } from "@/components/ui/Scroll-area";
+
 import {
   Select,
   SelectContent,
@@ -81,7 +81,7 @@ const page = ({}) => {
     },
   });
 
-  console.log(response);
+
   return (
     <div className="flex flex-col m-4 items-center justify-center ">
       <div>
