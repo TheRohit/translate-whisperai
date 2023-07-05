@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ScrollArea } from "@/components/ui/Scroll-area";
 import {
   Select,
   SelectContent,
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/Textarea";
 import { TRequest, TValidator } from "@/lib/validators/transcribe";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -26,12 +28,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
+import { ArrowLeft } from "lucide-react";
 
 const page = ({}) => {
   const [processing, setProcessing] = useState<boolean>(false);
   const [response, setResponse] = useState("");
+  const [translate, setTranslate] = useState(true);
+  const [translateloading, setTranslateLoading] = useState(false);
+  const [language, setLanguage] = useState("english");
 
-const router = useRouter();
+  const router = useRouter();
 
   const { mutate: sendTranscribe, isLoading } = useMutation({
     mutationFn: async ({ ...form }: any) => {
@@ -47,10 +53,25 @@ const router = useRouter();
       }
     },
     onSuccess: (data) => {
-      setResponse(data.data.text);
+      setResponse(data.data);
       setProcessing(false);
     },
   });
+
+  //translate
+  //send axios request
+  const handleTranslate = async () => {
+    setTranslateLoading(true);
+    try {
+      const { data } = await axios.post('/api/translate', { /* payload */ });
+      setResponse(data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+
+      setTranslateLoading(false);
+    }
+  };
 
   const form = useForm<TRequest>({
     resolver: zodResolver(TValidator),
@@ -59,11 +80,14 @@ const router = useRouter();
       model: "whisper-1",
     },
   });
+
   console.log(response);
   return (
     <div className="flex flex-col m-4 items-center justify-center ">
       <div>
-        <h1 className=" flex flex-col text-6xl font-bold mt-8 items-center">Transcription</h1>
+        <h1 className=" flex flex-col text-6xl font-bold mt-8 items-center">
+          Transcription
+        </h1>
         {processing ? (
           <Form {...form}>
             <form
@@ -117,39 +141,49 @@ const router = useRouter();
           </Form>
         ) : (
           <div>
-             <div className="flex flex-col justify-center items-center mt-20 border-black border-2 border-dashed mx-5 md:max-w-4xl">
-            <p className="m-5 items-center font-mono">
-              {/* {JSON.stringify(response)} */}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Commodo quis imperdiet massa tincidunt nunc pulvinar sapien.
-              Aliquam sem fringilla ut morbi tincidunt. Commodo elit at
-              imperdiet dui accumsan sit amet. Tellus id interdum velit laoreet
-              id donec.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Commodo quis imperdiet massa tincidunt nunc pulvinar sapien.
-              Aliquam sem fringilla ut morbi tincidunt. Commodo elit at
-              imperdiet dui accumsan sit amet. Tellus id interdum velit laoreet
-              id donec.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Commodo quis imperdiet massa tincidunt nunc pulvinar sapien.
-              Aliquam sem fringilla ut morbi tincidunt. Commodo elit at
-              imperdiet dui accumsan sit amet. Tellus id interdum velit laoreet
-              id donec.
-            </p>
-           
+            <div className="flex flex-col justify-center items-center mt-20 border-black border-2 border-dashed mx-5 md:max-w-4xl">
+              <Textarea
+                name="transcription"
+                className="h-96"
+                value={response}
+                onChange={(e) => {
+                  
+                }}
+               
+              ></Textarea>
+            </div>
             
-            
-          </div>
-          <div className="items-center flex justify-center mt-2">
-            <Button className="m-3 " variant={"outline"}  onClick={() => router.push('/') }>Try Again</Button>
-            <Button className="m-3 " onClick={() => router.push('/') }>Translate</Button>
+            <div className="flex items-center justify-center">
+            <Button
+                className="m-3 "
+                variant={"outline"}
+                onClick={() => router.push("/")}
+              >
+                <ArrowLeft />
+              </Button>
+              <div className="mx-3">
+              <Select 
+               
+               onValueChange={(value) => {
+                 setLanguage(value);
+               }}
+               defaultValue="english"
+               name="language"
+             >
+               <SelectTrigger>
+                 <SelectValue placeholder="Choose a response type." />
+               </SelectTrigger>
+               <SelectContent>
+                 <SelectItem value="english">English</SelectItem>
+               </SelectContent>
+             </Select>
+              </div>
+            <Button type="submit" onClick={handleTranslate} isLoading={translateloading} >
+              Translate
+            </Button>
             </div>
           </div>
-         
-          
         )}
-        
       </div>
     </div>
   );

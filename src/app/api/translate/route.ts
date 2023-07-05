@@ -1,4 +1,4 @@
-import { TValidator } from "@/lib/validators/transcribe";
+
 import axios from "axios";
 import fs from "fs";
 import { NextResponse } from "next/server";
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   body.append("response_format", "vtt");
   try {
     const { data } = await axios.post(
-      "https://api.openai.com/v1/audio/transcriptions",
+      "https://api.openai.com/v1/audio/translations",
       body,
       {
         headers: {
