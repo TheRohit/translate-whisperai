@@ -42,27 +42,43 @@ const TranscribePage: FC<TranscribePageProps> = ({}) => {
   const [translate, setTranslate] = useState(true);
   const [translateloading, setTranslateLoading] = useState(false);
   const [language, setLanguage] = useState("english");
-
+  const [isloading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const { mutate: sendTranscribe, isLoading } = useMutation({
-    mutationFn: async ({ ...form }: any) => {
-      const payload: any = { ...form };
-      const { data } = await axios.post('/api/transcribe', {payload});
-      return data;
-    },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 409) {
-          console.log(err);
-        }
-      }
-    },
-    onSuccess: (data) => {
+  // const { mutate: sendTranscribe, isLoading } = useMutation({
+  //   mutationFn: async ({ ...form }: any) => {
+  //     const payload: any = { ...form };
+  //     const { data } = await axios.post('/api/transcribe', {payload});
+  //     return data;
+  //   },
+  //   onError: (err) => {
+  //     if (err instanceof AxiosError) {
+  //       if (err.response?.status === 409) {
+  //         console.log(err);
+  //       }
+  //     }
+  //   },
+  //   onSuccess: (data) => {
+  //     setResponse(data.data);
+  //     setProcessing(false);
+  //   },
+  // });
+
+
+
+  const handleTranscribe = async () => {
+    
+    try {
+      setIsLoading(true)
+      const { data } = await axios.post('/api/transcribe', {});
       setResponse(data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false)
       setProcessing(false);
-    },
-  });
+    }
+  };
 
   //translate
   //send axios request
@@ -97,7 +113,7 @@ const TranscribePage: FC<TranscribePageProps> = ({}) => {
         {processing ? (
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit((e) => sendTranscribe(e))}
+              onSubmit={form.handleSubmit((e) => handleTranscribe())}
               className="space-y-8"
             >
               <FormField
@@ -140,7 +156,7 @@ const TranscribePage: FC<TranscribePageProps> = ({}) => {
                   </FormItem>
                 )}
               />
-              <Button isLoading={isLoading} type="submit">
+              <Button isLoading={isloading} type="submit">
                 Submit
               </Button>
             </form>
