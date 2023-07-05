@@ -48,7 +48,7 @@ const TranscribePage: FC<TranscribePageProps> = ({}) => {
   const { mutate: sendTranscribe, isLoading } = useMutation({
     mutationFn: async ({ ...form }: any) => {
       const payload: any = { ...form };
-      const { data } = await axios.post(`/api/transcribe`, payload);
+      const { data } = await axios.post('/api/transcribe', {});
       return data;
     },
     onError: (err) => {
