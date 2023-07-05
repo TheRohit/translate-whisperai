@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const apiKEY = process.env.OPENAI_API_KEY;
   const body= new FormData();
-  const filePath: string = "./tmp/test.mp4";
+  const filePath: string = "/tmp/test.mp4";
   const fileData = fs.readFileSync(filePath);
   const blob = new Blob([fileData], { type: "video/mp4" });
   body.append("file", blob, "test.mp4");
